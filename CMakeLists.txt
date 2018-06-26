@@ -107,7 +107,20 @@ add_executable(mono_kitti
 Examples/Monocular/mono_kitti.cc)
 target_link_libraries(mono_kitti ${PROJECT_NAME})
 
+
 add_executable(mono_euroc
 Examples/Monocular/mono_euroc.cc)
 target_link_libraries(mono_euroc ${PROJECT_NAME})
 
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/optimization)
+
+
+
+add_executable(pose_graph_se3
+Examples/optimization/pose_graph_se3.cc)
+target_link_libraries(pose_graph_se3 
+${EIGEN3_LIBS} 
+${PROJECT_NAME} 
+${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
+)

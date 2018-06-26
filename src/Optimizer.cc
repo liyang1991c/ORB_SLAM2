@@ -98,7 +98,7 @@ void Optimizer::BundleAdjustment(const vector<KeyFrame *> &vpKFs, const vector<M
         vPoint->setMarginalized(true);
         optimizer.addVertex(vPoint);
 
-       const map<KeyFrame*,size_t> observations = pMP->GetObservations();
+       const map<KeyFrame*,size_t> observations = pMP-> GetObservations();
 
         int nEdges = 0;
         //SET EDGES
