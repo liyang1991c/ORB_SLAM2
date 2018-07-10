@@ -17,54 +17,31 @@
 * You should have received a copy of the GNU General Public License
 * along with ORB-SLAM2. If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-
 #include <Optimizer.h>
-
-
 #include<Eigen/StdVector>
 #include<Eigen/Core>
 #include<Eigen/Geometry>
 #include <Converter.h>
-
 #include<mutex>
-
-
-
-
 #include<iostream>
 #include<algorithm>
 #include<fstream>
 #include<chrono>
 #include<iomanip>
-
 #include<opencv2/core/core.hpp>
-
-
-
-
 //#include <g2o/types/slam3d/types_slam3d.h>
-
-
 #include "Thirdparty/g2o/g2o/core/block_solver.h"
 #include "Thirdparty/g2o/g2o/core/optimization_algorithm_levenberg.h"
 #include "Thirdparty/g2o/g2o/core/optimization_algorithm_gauss_newton.h"
-
 #include "Thirdparty/g2o/g2o/solvers/linear_solver_eigen.h"
 #include "Thirdparty/g2o/g2o/types/types_six_dof_expmap.h"
 #include "Thirdparty/g2o/g2o/core/robust_kernel_impl.h"
 #include "Thirdparty/g2o/g2o/solvers/linear_solver_dense.h"
 #include "Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h"
 
-
-
 #include "System.h"
 
 using namespace std;
-
-
-
 
 int main(int argc, char **argv)
 {
@@ -89,13 +66,15 @@ int main(int argc, char **argv)
     
     g2o::BlockSolver_7_3::LinearSolverType * linearSolver =
            new g2o::LinearSolverEigen<g2o::BlockSolver_7_3::PoseMatrixType>();
+           
     g2o::BlockSolver_7_3 * solver_ptr= new g2o::BlockSolver_7_3(linearSolver);
     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr);
     
 
-//     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmGaussNewton(solver_ptr);
+//     g2o::OptimizationAlgorithmGaussNewton* solver = new g2o::OptimizationAlgorithmGaussNewton(solver_ptr);
+//     g2o::OptimizationAlgorithmGaussNewton* solver = new g2o::OptimizationAlgorithmGaussNewton ( solver_ptr );
     
-    solver->setUserLambdaInit(1e-16);
+//     solver->setUserLambdaInit(1e-16);
     optimizer.setAlgorithm(solver);
     
     
@@ -136,18 +115,13 @@ int main(int argc, char **argv)
             Eigen::Matrix<double,3,3> Rcw = q.toRotationMatrix();
             Eigen::Matrix<double,3,1> tcw;
             tcw << tx , ty, tz ;
-            /*
-            cout << tcw << endl;*/
+
             
             
             
             g2o::VertexSim3Expmap* VSim3 = new g2o::VertexSim3Expmap();
-            
-//             Eigen::Matrix<double,3,3> Rcw = Converter::toMatrix3d(pKF->GetRotation());
-//             Eigen::Matrix<double,3,1> tcw = Converter::toVector3d(pKF->GetTranslation());
-            
+                        
             g2o::Sim3 Siw(Rcw,tcw,1.0);
-            
             VSim3->setEstimate(Siw);    
             VSim3->setId(index);
             VSim3->setMarginalized(false);
@@ -237,7 +211,7 @@ int main(int argc, char **argv)
 
         
     }*/
-//     optimizer.save("result.g2o");
+    optimizer.save("result.g2o");
     
     
     
